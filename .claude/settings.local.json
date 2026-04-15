@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python *)",
+      "Bash(pip install *)",
+      "Bash(C:\\\\Python311\\\\python.exe -m pip install openpyxl -q)",
+      "Bash(C:Python311python.exe -c ' *)",
+      "Bash(py --version)",
+      "Read(//c/Python311//**)",
+      "Bash(ls /c/Python*/python.exe)",
+      "Bash(/c/Python311/python.exe -m pip install openpyxl -q)",
+      "Bash(/c/Python311/python.exe -c ' *)",
+      "WebFetch(domain:coszonemall.com)"
+    ]
+  }
+}
