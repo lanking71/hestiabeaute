@@ -10,7 +10,32 @@
       "Bash(ls /c/Python*/python.exe)",
       "Bash(/c/Python311/python.exe -m pip install openpyxl -q)",
       "Bash(/c/Python311/python.exe -c ' *)",
-      "WebFetch(domain:coszonemall.com)"
+      "WebFetch(domain:coszonemall.com)",
+      "Bash(npx create-next-app@14 frontend --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --no-git)",
+      "Bash(npm install *)",
+      "Bash(npx shadcn@latest init --yes)",
+      "Bash(mkdir -p D:/hestiabeaute/frontend/src/styles)",
+      "Bash(mkdir -p D:/hestiabeaute/frontend/src/lib)",
+      "Bash(mkdir -p D:/hestiabeaute/frontend/src/components/ui)",
+      "Bash(mkdir -p D:/hestiabeaute/frontend/src/components/layout)",
+      "Bash(mkdir -p D:/hestiabeaute/frontend/src/components/home)",
+      "Bash(mkdir -p \"D:/hestiabeaute/frontend/src/app/products/[category]\")",
+      "Bash(mkdir -p \"D:/hestiabeaute/frontend/src/app/products/[category]/[slug]\")",
+      "Bash(mkdir -p \"D:/hestiabeaute/frontend/src/app/inquiry/[id]\")",
+      "Bash(mkdir -p \"D:/hestiabeaute/frontend/src/app/admin/products/[id]\")",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "Bash(D:/hestiabeaute/.venv/Scripts/python.exe *)",
+      "Bash(/c/Users/X150M/AppData/Local/Programs/Python/Python311/python.exe *)",
+      "Read(//c/Users/X150M/AppData/Local/Programs/**)",
+      "Bash(where.exe python *)",
+      "Bash(/c/Python311/python.exe *)",
+      "Bash(PYTHONUTF8=1 /c/Python311/python.exe seed.py)",
+      "Bash(PYTHONUTF8=1 /c/Python311/python.exe -m uvicorn app.main:app --reload --port 8000)",
+      "Bash(curl -s http://localhost:8000/api/categories)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('categories:', len\\(d\\)\\)\")",
+      "Bash(PYTHONUTF8=1 /c/Python311/python.exe -m uvicorn app.main:app --port 8000)",
+      "Bash(powershell.exe -Command \"Invoke-WebRequest -Uri 'http://localhost:8000/api/categories' -UseBasicParsing | Select-Object -ExpandProperty Content\")"
     ]
   }
 }
