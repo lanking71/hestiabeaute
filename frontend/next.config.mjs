@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: "standalone", // Docker 경량 빌드용
   images: {
     remotePatterns: [
       {
@@ -8,8 +9,14 @@ const nextConfig = {
         port: "8000",
         pathname: "/static/**",
       },
+      {
+        // Docker 환경에서 nginx를 통한 이미지 접근
+        protocol: "http",
+        hostname: "**",
+        pathname: "/static/**",
+      },
     ],
-    unoptimized: process.env.NODE_ENV === "development",
+    unoptimized: true, // nginx가 정적 파일을 직접 서빙하므로
   },
 };
 

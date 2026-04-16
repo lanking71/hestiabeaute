@@ -1,6 +1,10 @@
 import { Category, Product, Inquiry, InquiryCreate, PaginatedResponse, AdminToken } from "./types";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+// 서버사이드(SSR/SSG)에서는 Docker 내부 URL, 브라우저에서는 공개 URL 사용
+const API_URL =
+  typeof window === "undefined"
+    ? process.env.INTERNAL_API_URL || process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api"
+    : process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
 
 async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, {
