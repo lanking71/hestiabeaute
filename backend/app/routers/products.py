@@ -12,7 +12,7 @@ def list_products(
     bestseller: bool | None = Query(None),
     new: bool | None = Query(None),
     page: int = Query(1, ge=1),
-    size: int = Query(20, ge=1, le=100),
+    size: int = Query(20, ge=1, le=500),
     db: Session = Depends(get_db),
 ):
     """제품 목록 (카테고리/베스트셀러/신제품 필터 + 페이지네이션)"""

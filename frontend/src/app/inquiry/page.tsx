@@ -5,6 +5,8 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "제품 문의" };
 
+export const revalidate = 0;
+
 interface Props {
   searchParams: { page?: string };
 }

@@ -11,6 +11,8 @@ interface Props {
 
 export const metadata: Metadata = { title: "문의 상세" };
 
+export const revalidate = 0;
+
 export default async function InquiryDetailPage({ params }: Props) {
   const id = Number(params.id);
   const inquiry = await getInquiry(id).catch(() => null);

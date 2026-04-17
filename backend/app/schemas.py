@@ -105,6 +105,7 @@ class ProductOut(ProductBase):
 
 class ProductListOut(BaseModel):
     id: int
+    category_id: int
     name: str
     name_ko: Optional[str]
     slug: str
@@ -112,6 +113,7 @@ class ProductListOut(BaseModel):
     image_url: Optional[str]
     is_bestseller: bool
     is_new: bool
+    is_active: bool
     category: CategoryOut
 
     class Config:

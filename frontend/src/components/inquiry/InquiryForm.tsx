@@ -34,7 +34,11 @@ export default function InquiryForm({ productId }: InquiryFormProps) {
 
     try {
       const inquiry = await createInquiry(data);
-      router.push(`/inquiry/${inquiry.id}`);
+      if (data.is_secret) {
+        router.push("/inquiry");
+      } else {
+        router.push(`/inquiry/${inquiry.id}`);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "문의 등록에 실패했습니다.");
     } finally {
