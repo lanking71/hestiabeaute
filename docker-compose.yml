@@ -14,7 +14,7 @@ services:
       CORS_ORIGINS: "http://localhost:8082,http://localhost:8083,https://www.hestiabeaute.com/,https://hestiabeaute.com/"
       # bcrypt 해시의 $ 기호가 env_file에서 깨질 수 있으므로 여기서 직접 지정
       # 아래 값을 실제 생성한 해시로 교체하세요 ($ → $$ 로 이스케이프 필요)
-      ADMIN_PASSWORD_HASH: "$$2b$$12$$7dc3ptePjHpDLIuCrjxPk./gPOdD4KolxurjR/5ZT0Ke.FnNEXbQ6"
+      ADMIN_PASSWORD_HASH: "$$2b$$12$$MpJKO.nzn4jWtw5mAtc.WODqiSpv4yH/tEz6ak1LfsIv5wqa9XtDK"
     ports:
       - "8083:8000"   # NPM → /api, /static 라우팅용
     volumes:
