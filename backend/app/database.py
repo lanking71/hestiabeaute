@@ -26,4 +26,5 @@ def get_db():
 
 def create_tables():
     """앱 시작 시 테이블 생성"""
+    from app import models  # noqa: F401 — Base에 테이블 등록
     Base.metadata.create_all(bind=engine)
