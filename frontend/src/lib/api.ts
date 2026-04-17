@@ -70,11 +70,10 @@ export async function createInquiry(data: InquiryCreate): Promise<Inquiry> {
 // ─── 관리자 API ───────────────────────────────────────────────────────────────
 
 export async function adminLogin(username: string, password: string): Promise<AdminToken> {
-  const form = new URLSearchParams({ username, password });
   const res = await fetch(`${API_URL}/admin/login`, {
     method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: form,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, password }),
   });
   if (!res.ok) throw new Error("로그인 실패");
   return res.json();
