@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Inter, Noto_Sans_KR } from "next/font/google";
+import { Cormorant_Garamond, DM_Sans, Noto_Sans_KR } from "next/font/google";
 import "@/styles/globals.css";
 import AnnouncementBar from "@/components/layout/AnnouncementBar";
 import Header from "@/components/layout/Header";
@@ -7,15 +7,18 @@ import Footer from "@/components/layout/Footer";
 import { getCategories } from "@/lib/api";
 import { SITE_NAME, SITE_DESCRIPTION } from "@/lib/constants";
 
-const playfair = Playfair_Display({
+const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
-  variable: "--font-playfair",
+  variable: "--font-cormorant",
+  weight: ["300", "400", "500", "600", "700"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
-const inter = Inter({
+const dmSans = DM_Sans({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-dm-sans",
+  weight: ["300", "400", "500", "600"],
   display: "swap",
 });
 
@@ -25,6 +28,8 @@ const notoSansKR = Noto_Sans_KR({
   weight: ["300", "400", "500", "700"],
   display: "swap",
 });
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: {
@@ -43,7 +48,7 @@ export default async function RootLayout({
   const categories = await getCategories().catch(() => []);
 
   return (
-    <html lang="ko" className={`${playfair.variable} ${inter.variable} ${notoSansKR.variable}`}>
+    <html lang="ko" className={`${cormorant.variable} ${dmSans.variable} ${notoSansKR.variable}`}>
       <body className="antialiased bg-hestia-cream text-hestia-dark min-h-screen flex flex-col">
         <AnnouncementBar />
         <Header categories={categories} />

@@ -11,12 +11,14 @@ const config: Config = {
     extend: {
       colors: {
         hestia: {
-          gold: "#C9A96E",
-          cream: "#F9F5EF",
-          dark: "#1C1C1C",
-          gray: "#6B6B6B",
-          white: "#FFFFFF",
-          light: "#F0EBE3",
+          gold:    "#B8935A",   // 깊은 앤티크 골드
+          "gold-light": "#D4AF78", // 밝은 골드 (호버)
+          cream:   "#FAF7F2",   // 따뜻한 크림
+          dark:    "#1A1714",   // 깊은 다크브라운
+          gray:    "#7A7370",   // 웜 그레이
+          white:   "#FFFFFF",
+          light:   "#F2EDE6",   // 섹션 배경
+          muted:   "#EDE8E0",   // 보더, 구분선
         },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -49,8 +51,10 @@ const config: Config = {
         },
       },
       fontFamily: {
-        playfair: ["var(--font-playfair)", "Georgia", "serif"],
-        inter: ["var(--font-inter)", "system-ui", "sans-serif"],
+        cormorant: ["var(--font-cormorant)", "Georgia", "serif"],
+        playfair: ["var(--font-cormorant)", "Georgia", "serif"], // 하위호환
+        "dm-sans": ["var(--font-dm-sans)", "system-ui", "sans-serif"],
+        inter: ["var(--font-dm-sans)", "system-ui", "sans-serif"],   // 하위호환
         noto: ["var(--font-noto)", "sans-serif"],
       },
       borderRadius: {

@@ -28,7 +28,7 @@ function authHeaders(token: string) {
 // ─── 공개 API ────────────────────────────────────────────────────────────────
 
 export async function getCategories(): Promise<Category[]> {
-  return apiFetch<Category[]>("/categories");
+  return apiFetch<Category[]>("/categories", { cache: "no-store" });
 }
 
 export async function getProducts(params?: {
