@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import AdminLayout from "@/components/admin/AdminLayout";
 import ProductForm from "@/components/admin/ProductForm";
-import { adminGetCategories, adminGetProducts, adminUpdateProduct } from "@/lib/api";
+import { adminGetCategories, adminGetProduct, adminUpdateProduct } from "@/lib/api";
 import { Category, Product } from "@/lib/types";
 
 export default function AdminProductEditPage() {
@@ -18,16 +18,17 @@ export default function AdminProductEditPage() {
     const token = localStorage.getItem("admin_token") || "";
     Promise.all([
       adminGetCategories(token),
-      adminGetProducts(token).then((r) => r.items.find((p) => p.id === id)),
+      adminGetProduct(token, id),
     ]).then(([cats, prod]) => {
       setCategories(cats);
-      if (prod) setProduct(prod);
+      setProduct(prod);
     }).catch(() => {});
   }, [id]);
 
   async function handleSubmit(data: Partial<Product> & { image_urls_raw?: string }) {
     const token = localStorage.getItem("admin_token") || "";
     const { image_urls_raw, ...rest } = data;
+    // image_urls_raw는 JSON 문자열 → 백엔드 image_urls(str)에 그대로 전달
     await adminUpdateProduct(token, id, { ...rest, image_urls: image_urls_raw as unknown as string[] });
     router.push("/admin/products");
   }

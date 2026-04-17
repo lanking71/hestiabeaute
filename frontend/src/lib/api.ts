@@ -181,6 +181,11 @@ export async function adminGetProducts(token: string, params?: {
   });
 }
 
+// 관리자: 제품 단건 조회 (수정 폼용)
+export async function adminGetProduct(token: string, id: number): Promise<Product> {
+  return apiFetch<Product>(`/admin/products/${id}`, { headers: authHeaders(token) });
+}
+
 // 관리자: 새 제품 등록하기
 export async function adminCreateProduct(token: string, data: Partial<Product>): Promise<Product> {
   return apiFetch<Product>("/admin/products", {

@@ -19,6 +19,19 @@ def list_products(
     return crud.get_products(db, category_slug=category, active_only=False, page=page, size=size)
 
 
+@router.get("/{product_id}", response_model=schemas.ProductOut)
+def get_product(
+    product_id: int,
+    db: Session = Depends(get_db),
+    _: str = Depends(get_current_admin),
+):
+    """제품 단건 조회 (수정 폼용 — 전체 필드 포함)"""
+    result = crud.get_product(db, product_id)
+    if not result:
+        raise HTTPException(status_code=404, detail="제품을 찾을 수 없습니다")
+    return result
+
+
 @router.post("", response_model=schemas.ProductOut, status_code=201)
 def create_product(
     data: schemas.ProductCreate,
