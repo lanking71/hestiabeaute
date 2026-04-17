@@ -5,6 +5,7 @@ from functools import lru_cache
 class Settings(BaseSettings):
     secret_key: str = "hestia-secret-key"
     admin_username: str = "admin"
+    admin_password: str = "admin1234"
     admin_password_hash: str = ""
     database_url: str = "sqlite:///./hestia.db"
     upload_dir: str = "static/uploads/products"

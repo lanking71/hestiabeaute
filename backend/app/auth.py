@@ -22,7 +22,7 @@ def create_access_token(data: dict) -> str:
 def authenticate_admin(username: str, password: str) -> bool:
     if username != settings.admin_username:
         return False
-    return verify_password(password, settings.admin_password_hash)
+    return password == settings.admin_password
 
 
 def get_current_admin(
