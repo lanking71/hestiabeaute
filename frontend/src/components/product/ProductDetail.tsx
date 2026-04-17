@@ -27,16 +27,23 @@ interface ProductDetailProps {
   product: Product;
 }
 
-// 탭 목록 정의 (id: 코드용 식별자, label: 화면에 표시되는 텍스트)
-const TABS = [
+const ALL_TABS = [
   { id: "description", label: "제품 설명" },
   { id: "ingredients", label: "성분" },
   { id: "how_to_use", label: "사용 방법" },
 ];
 
 export default function ProductDetail({ product }: ProductDetailProps) {
-  // 현재 선택된 탭 (기본값: "description")
-  const [tab, setTab] = useState("description");
+  // 값이 있는 탭만 필터링
+  const TABS = ALL_TABS.filter(({ id }) => {
+    if (id === "description") return !!product.description;
+    if (id === "ingredients") return !!product.ingredients;
+    if (id === "how_to_use") return !!product.how_to_use;
+    return false;
+  });
+
+  // 첫 번째 유효 탭을 기본값으로
+  const [tab, setTab] = useState(TABS[0]?.id || "");
 
   return (
     <div className="space-y-6">
@@ -86,52 +93,39 @@ export default function ProductDetail({ product }: ProductDetailProps) {
       {/* 구분선 */}
       <div className="w-full h-px bg-hestia-light" />
 
-      {/* ── 탭 메뉴 ── */}
-      <div>
-        {/* 탭 버튼들 */}
-        <div className="flex border-b border-hestia-light">
-          {TABS.map(({ id, label }) => (
-            <button
-              key={id}
-              onClick={() => setTab(id)}  // 클릭 시 현재 탭 변경
-              className={cn(
-                "px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors",
-                // 선택된 탭: 골드 밑줄 + 골드 글씨
-                tab === id
-                  ? "border-hestia-gold text-hestia-gold"
-                  // 선택 안 된 탭: 밑줄 없음 + 회색 글씨 (호버 시 어두워짐)
-                  : "border-transparent text-hestia-gray hover:text-hestia-dark"
-              )}
-            >
-              {label}
-            </button>
-          ))}
+      {/* ── 탭 메뉴 (값이 있는 탭만 표시) ── */}
+      {TABS.length > 0 && (
+        <div>
+          <div className="flex border-b border-hestia-light">
+            {TABS.map(({ id, label }) => (
+              <button
+                key={id}
+                onClick={() => setTab(id)}
+                className={cn(
+                  "px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors",
+                  tab === id
+                    ? "border-hestia-gold text-hestia-gold"
+                    : "border-transparent text-hestia-gray hover:text-hestia-dark"
+                )}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          <div className="py-6 text-sm text-hestia-dark leading-relaxed">
+            {tab === "description" && (
+              <div dangerouslySetInnerHTML={{ __html: product.description! }} />
+            )}
+            {tab === "ingredients" && (
+              <p className="whitespace-pre-line">{product.ingredients}</p>
+            )}
+            {tab === "how_to_use" && (
+              <p className="whitespace-pre-line">{product.how_to_use}</p>
+            )}
+          </div>
         </div>
-
-        {/* 탭 내용 */}
-        <div className="py-6 text-sm text-hestia-dark leading-relaxed">
-          {/* 제품 설명 탭 (HTML 내용 직접 렌더링) */}
-          {tab === "description" && (
-            <div
-              // dangerouslySetInnerHTML: HTML 문자열을 실제 HTML로 렌더링
-              // "dangerously"라는 이름이지만, 관리자만 내용을 입력하므로 안전해요
-              dangerouslySetInnerHTML={{
-                __html: product.description || "제품 설명이 없습니다.",
-              }}
-            />
-          )}
-
-          {/* 성분 탭 (줄바꿈 유지: whitespace-pre-line) */}
-          {tab === "ingredients" && (
-            <p className="whitespace-pre-line">{product.ingredients || "성분 정보가 없습니다."}</p>
-          )}
-
-          {/* 사용 방법 탭 */}
-          {tab === "how_to_use" && (
-            <p className="whitespace-pre-line">{product.how_to_use || "사용 방법 정보가 없습니다."}</p>
-          )}
-        </div>
-      </div>
+      )}
 
     </div>
   );

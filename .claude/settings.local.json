@@ -35,7 +35,12 @@
       "Bash(curl -s http://localhost:8000/api/categories)",
       "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('categories:', len\\(d\\)\\)\")",
       "Bash(PYTHONUTF8=1 /c/Python311/python.exe -m uvicorn app.main:app --port 8000)",
-      "Bash(powershell.exe -Command \"Invoke-WebRequest -Uri 'http://localhost:8000/api/categories' -UseBasicParsing | Select-Object -ExpandProperty Content\")"
+      "Bash(powershell.exe -Command \"Invoke-WebRequest -Uri 'http://localhost:8000/api/categories' -UseBasicParsing | Select-Object -ExpandProperty Content\")",
+      "Bash(D:/hestiabeaute/.venv/Scripts/pip install *)",
+      "Bash(where python *)",
+      "Bash(C:/Python311/python.exe *)",
+      "Bash(D:/hestiabeaute/.venv/Scripts/uvicorn.exe app.main:app --reload --port 8000)",
+      "Bash(cat uvicorn.log)"
     ]
   }
 }
