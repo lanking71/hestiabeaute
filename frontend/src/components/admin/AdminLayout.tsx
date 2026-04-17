@@ -11,11 +11,13 @@ import {
   LogOut,
   Menu,
   X,
+  ImageIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
   { href: "/admin/dashboard", label: "대시보드", icon: LayoutDashboard },
+  { href: "/admin/banners", label: "배너 관리", icon: ImageIcon },
   { href: "/admin/categories", label: "카테고리", icon: Layers },
   { href: "/admin/products", label: "제품 관리", icon: Package },
   { href: "/admin/inquiry", label: "문의 관리", icon: MessageSquare },

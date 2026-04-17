@@ -22,13 +22,24 @@ export interface Product {
   skin_type?: string;
   how_to_use?: string;
   image_url?: string;
-  image_urls?: string[];
+  image_urls?: string[];   // 상세페이지 이미지 목록
   is_bestseller: boolean;
   is_new: boolean;
   is_active: boolean;
   sort_order: number;
   created_at: string;
   updated_at: string;
+}
+
+export interface Banner {
+  id: number;
+  title: string;
+  subtitle?: string;
+  image_url?: string;
+  link_url?: string;
+  sort_order: number;
+  is_active: boolean;
+  created_at: string;
 }
 
 export interface Inquiry {

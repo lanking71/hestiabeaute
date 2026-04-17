@@ -118,11 +118,10 @@ def update_product(db: Session, product_id: int, data: schemas.ProductUpdate) ->
 
 
 def delete_product(db: Session, product_id: int) -> bool:
-    """소프트 삭제 — is_active=False로 변경"""
     obj = get_product(db, product_id)
     if not obj:
         return False
-    obj.is_active = False
+    db.delete(obj)
     db.commit()
     return True
 
@@ -183,6 +182,49 @@ def answer_inquiry(db: Session, inquiry_id: int, answer: str) -> models.Inquiry 
 
 def delete_inquiry(db: Session, inquiry_id: int) -> bool:
     obj = get_inquiry(db, inquiry_id)
+    if not obj:
+        return False
+    db.delete(obj)
+    db.commit()
+    return True
+
+
+# ─────────────────────────────────────────
+# Banner CRUD
+# ─────────────────────────────────────────
+
+def get_banners(db: Session, active_only: bool = True) -> list[models.Banner]:
+    q = db.query(models.Banner)
+    if active_only:
+        q = q.filter(models.Banner.is_active == True)
+    return q.order_by(models.Banner.sort_order).all()
+
+
+def get_banner(db: Session, banner_id: int) -> models.Banner | None:
+    return db.query(models.Banner).filter(models.Banner.id == banner_id).first()
+
+
+def create_banner(db: Session, data: schemas.BannerCreate) -> models.Banner:
+    obj = models.Banner(**data.model_dump())
+    db.add(obj)
+    db.commit()
+    db.refresh(obj)
+    return obj
+
+
+def update_banner(db: Session, banner_id: int, data: schemas.BannerUpdate) -> models.Banner | None:
+    obj = get_banner(db, banner_id)
+    if not obj:
+        return None
+    for field, value in data.model_dump(exclude_unset=True).items():
+        setattr(obj, field, value)
+    db.commit()
+    db.refresh(obj)
+    return obj
+
+
+def delete_banner(db: Session, banner_id: int) -> bool:
+    obj = get_banner(db, banner_id)
     if not obj:
         return False
     db.delete(obj)

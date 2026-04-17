@@ -5,11 +5,12 @@ from pathlib import Path
 
 from app.config import get_settings
 from app.database import create_tables
-from app.routers import categories, products, inquiry
+from app.routers import categories, products, inquiry, banners
 from app.routers.admin import auth, categories as admin_categories
 from app.routers.admin import products as admin_products
 from app.routers.admin import inquiry as admin_inquiry
 from app.routers.admin import upload
+from app.routers.admin import banners as admin_banners
 
 settings = get_settings()
 
@@ -36,6 +37,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 app.include_router(categories.router)
 app.include_router(products.router)
 app.include_router(inquiry.router)
+app.include_router(banners.router)
 
 # 관리자 라우터 등록
 app.include_router(auth.router)
@@ -43,6 +45,7 @@ app.include_router(admin_categories.router)
 app.include_router(admin_products.router)
 app.include_router(admin_inquiry.router)
 app.include_router(upload.router)
+app.include_router(admin_banners.router)
 
 
 @app.on_event("startup")

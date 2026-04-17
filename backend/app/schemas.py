@@ -1,6 +1,7 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, field_validator
 from datetime import datetime
 from typing import Optional
+import json
 
 
 # ─────────────────────────────────────────
@@ -84,8 +85,19 @@ class ProductUpdate(BaseModel):
 class ProductOut(ProductBase):
     id: int
     category: CategoryOut
+    image_urls: Optional[list[str]] = None  # JSON 문자열 → 리스트로 변환
     created_at: datetime
     updated_at: datetime
+
+    @field_validator("image_urls", mode="before")
+    @classmethod
+    def parse_image_urls(cls, v):
+        if isinstance(v, str):
+            try:
+                return json.loads(v)
+            except Exception:
+                return []
+        return v or []
 
     class Config:
         from_attributes = True
@@ -153,6 +165,40 @@ class InquiryDetailOut(BaseModel):
     answer: Optional[str]
     answered_at: Optional[datetime]
     is_answered: bool
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+# ─────────────────────────────────────────
+# Banner 스키마
+# ─────────────────────────────────────────
+
+class BannerBase(BaseModel):
+    title: str
+    subtitle: Optional[str] = None
+    image_url: Optional[str] = None
+    link_url: Optional[str] = "/products"
+    sort_order: int = 0
+    is_active: bool = True
+
+
+class BannerCreate(BannerBase):
+    pass
+
+
+class BannerUpdate(BaseModel):
+    title: Optional[str] = None
+    subtitle: Optional[str] = None
+    image_url: Optional[str] = None
+    link_url: Optional[str] = None
+    sort_order: Optional[int] = None
+    is_active: Optional[bool] = None
+
+
+class BannerOut(BannerBase):
+    id: int
     created_at: datetime
 
     class Config:

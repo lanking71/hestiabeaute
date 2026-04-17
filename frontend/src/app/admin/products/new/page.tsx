@@ -16,9 +16,10 @@ export default function AdminProductNewPage() {
     adminGetCategories(token).then(setCategories).catch(() => {});
   }, []);
 
-  async function handleSubmit(data: Partial<Product>) {
+  async function handleSubmit(data: Partial<Product> & { image_urls_raw?: string }) {
     const token = localStorage.getItem("admin_token") || "";
-    await adminCreateProduct(token, data);
+    const { image_urls_raw, ...rest } = data;
+    await adminCreateProduct(token, { ...rest, image_urls: image_urls_raw as unknown as string[] });
     router.push("/admin/products");
   }
 

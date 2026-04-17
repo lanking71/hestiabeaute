@@ -25,9 +25,10 @@ export default function AdminProductEditPage() {
     }).catch(() => {});
   }, [id]);
 
-  async function handleSubmit(data: Partial<Product>) {
+  async function handleSubmit(data: Partial<Product> & { image_urls_raw?: string }) {
     const token = localStorage.getItem("admin_token") || "";
-    await adminUpdateProduct(token, id, data);
+    const { image_urls_raw, ...rest } = data;
+    await adminUpdateProduct(token, id, { ...rest, image_urls: image_urls_raw as unknown as string[] });
     router.push("/admin/products");
   }
 

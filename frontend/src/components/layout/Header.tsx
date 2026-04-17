@@ -28,29 +28,32 @@ export default function Header({ categories }: HeaderProps) {
         scrolled && "shadow-sm"
       )}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+      {/* 상단 줄: 로고 왼쪽, 문의 오른쪽 */}
+      <div className="max-w-[1600px] mx-auto px-6 lg:px-10">
+        <div className="flex items-center justify-between h-14 border-b border-hestia-muted">
           {/* 로고 */}
-          <Link href="/" className="flex items-center">
-            <span className="font-playfair text-2xl font-bold tracking-widest text-hestia-dark">
+          <Link href="/" className="flex items-center gap-2">
+            <span className="font-cormorant text-2xl font-semibold tracking-[0.25em] text-hestia-dark">
               HESTIA
             </span>
-            <span className="ml-1 text-xs text-hestia-gold font-medium tracking-wider">
+            <span className="text-[10px] text-hestia-gold font-medium tracking-[0.2em] hidden sm:block">
               BEAUTY
             </span>
           </Link>
 
-          {/* 데스크탑 네비 */}
-          <Navigation categories={categories} />
-
-          {/* 우측 아이콘 */}
-          <div className="flex items-center gap-3">
-            <button className="p-2 hover:text-hestia-gold transition-colors" aria-label="검색">
-              <Search className="h-5 w-5" />
+          {/* 우측: 검색 + 문의 + 모바일 메뉴 */}
+          <div className="flex items-center gap-4">
+            <Link
+              href="/inquiry"
+              className="hidden md:block text-[11px] tracking-[0.2em] text-hestia-gray hover:text-hestia-gold transition-colors uppercase"
+            >
+              문의
+            </Link>
+            <button className="p-1.5 hover:text-hestia-gold transition-colors" aria-label="검색">
+              <Search className="h-4 w-4" />
             </button>
-            {/* 모바일 메뉴 버튼 */}
             <button
-              className="md:hidden p-2 hover:text-hestia-gold transition-colors"
+              className="lg:hidden p-1.5 hover:text-hestia-gold transition-colors"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="메뉴"
             >
@@ -58,46 +61,31 @@ export default function Header({ categories }: HeaderProps) {
             </button>
           </div>
         </div>
+
+        {/* 카테고리 네비 줄 */}
+        <div className="hidden lg:flex items-center justify-center py-2.5 overflow-x-auto">
+          <Navigation categories={categories} />
+        </div>
       </div>
 
       {/* 모바일 메뉴 */}
       {mobileOpen && (
-        <div className="md:hidden border-t border-hestia-light bg-white">
-          <nav className="px-4 py-4 space-y-2">
-            <Link
-              href="/"
-              className="block py-2 text-sm font-medium hover:text-hestia-gold"
-              onClick={() => setMobileOpen(false)}
-            >
-              홈
-            </Link>
-            <Link
-              href="/products"
-              className="block py-2 text-sm font-medium hover:text-hestia-gold"
-              onClick={() => setMobileOpen(false)}
-            >
-              전체 제품
-            </Link>
+        <div className="lg:hidden border-t border-hestia-muted bg-white">
+          <nav className="px-6 py-4 space-y-1">
             {categories.map((cat) => (
               <Link
                 key={cat.id}
                 href={`/products/${cat.slug}`}
-                className="block py-2 pl-4 text-sm text-hestia-gray hover:text-hestia-gold"
+                className="block py-2.5 text-xs tracking-[0.15em] text-hestia-dark hover:text-hestia-gold border-b border-hestia-muted/50 uppercase"
                 onClick={() => setMobileOpen(false)}
               >
-                {cat.name_ko}
+                {cat.name_en}
+                <span className="ml-2 text-hestia-gray normal-case tracking-normal">{cat.name_ko}</span>
               </Link>
             ))}
             <Link
-              href="/about"
-              className="block py-2 text-sm font-medium hover:text-hestia-gold"
-              onClick={() => setMobileOpen(false)}
-            >
-              브랜드 소개
-            </Link>
-            <Link
               href="/inquiry"
-              className="block py-2 text-sm font-medium hover:text-hestia-gold"
+              className="block pt-3 text-xs tracking-[0.15em] text-hestia-dark hover:text-hestia-gold uppercase"
               onClick={() => setMobileOpen(false)}
             >
               제품 문의

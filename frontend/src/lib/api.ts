@@ -1,4 +1,4 @@
-import { Category, Product, Inquiry, InquiryCreate, PaginatedResponse, AdminToken } from "./types";
+import { Category, Product, Inquiry, InquiryCreate, PaginatedResponse, AdminToken, Banner } from "./types";
 
 // 서버사이드(SSR/SSG)에서는 Docker 내부 URL, 브라우저에서는 공개 URL 사용
 const API_URL =
@@ -29,6 +29,10 @@ function authHeaders(token: string) {
 
 export async function getCategories(): Promise<Category[]> {
   return apiFetch<Category[]>("/categories", { cache: "no-store" });
+}
+
+export async function getBanners(): Promise<Banner[]> {
+  return apiFetch<Banner[]>("/banners", { cache: "no-store" });
 }
 
 export async function getProducts(params?: {
@@ -171,6 +175,35 @@ export async function adminAnswerInquiry(token: string, id: number, answer: stri
 
 export async function adminDeleteInquiry(token: string, id: number): Promise<void> {
   await apiFetch(`/admin/inquiry/${id}`, {
+    method: "DELETE",
+    headers: authHeaders(token),
+  });
+}
+
+// ─── 배너 관리 API ────────────────────────────────────────────────────────────
+
+export async function adminGetBanners(token: string): Promise<Banner[]> {
+  return apiFetch<Banner[]>("/admin/banners", { headers: authHeaders(token) });
+}
+
+export async function adminCreateBanner(token: string, data: Partial<Banner>): Promise<Banner> {
+  return apiFetch<Banner>("/admin/banners", {
+    method: "POST",
+    headers: authHeaders(token),
+    body: JSON.stringify(data),
+  });
+}
+
+export async function adminUpdateBanner(token: string, id: number, data: Partial<Banner>): Promise<Banner> {
+  return apiFetch<Banner>(`/admin/banners/${id}`, {
+    method: "PUT",
+    headers: authHeaders(token),
+    body: JSON.stringify(data),
+  });
+}
+
+export async function adminDeleteBanner(token: string, id: number): Promise<void> {
+  await apiFetch(`/admin/banners/${id}`, {
     method: "DELETE",
     headers: authHeaders(token),
   });

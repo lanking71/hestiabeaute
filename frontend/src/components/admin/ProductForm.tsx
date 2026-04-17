@@ -6,11 +6,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import ImageUploader from "./ImageUploader";
+import Image from "next/image";
+import { getImageUrl } from "@/lib/utils";
+import { adminUploadImage } from "@/lib/api";
+import { X, Plus } from "lucide-react";
 
 interface ProductFormProps {
   initial?: Partial<Product>;
   categories: Category[];
-  onSubmit: (data: Partial<Product>) => Promise<void>;
+  onSubmit: (data: Partial<Product> & { image_urls_raw?: string }) => Promise<void>;
   onCancel: () => void;
 }
 
@@ -18,8 +22,33 @@ export default function ProductForm({ initial, categories, onSubmit, onCancel }:
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [imageUrl, setImageUrl] = useState(initial?.image_url || "");
+  const [detailImages, setDetailImages] = useState<string[]>(initial?.image_urls || []);
   const [isBestseller, setIsBestseller] = useState(initial?.is_bestseller ?? false);
   const [isNew, setIsNew] = useState(initial?.is_new ?? false);
+  const [uploading, setUploading] = useState(false);
+
+  async function handleDetailImageAdd(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files;
+    if (!files) return;
+    setUploading(true);
+    try {
+      const token = localStorage.getItem("admin_token") || "";
+      const urls: string[] = [];
+      for (const file of Array.from(files)) {
+        const { url } = await adminUploadImage(token, file);
+        urls.push(url);
+      }
+      setDetailImages((prev) => [...prev, ...urls]);
+    } catch {
+      alert("이미지 업로드 실패");
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  function removeDetailImage(index: number) {
+    setDetailImages((prev) => prev.filter((_, i) => i !== index));
+  }
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -27,9 +56,10 @@ export default function ProductForm({ initial, categories, onSubmit, onCancel }:
     setLoading(true);
 
     const form = e.currentTarget;
-    const get = (name: string) => (form.elements.namedItem(name) as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement)?.value;
+    const get = (name: string) =>
+      (form.elements.namedItem(name) as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement)?.value;
 
-    const data: Partial<Product> = {
+    const data: Partial<Product> & { image_urls_raw?: string } = {
       category_id: Number(get("category_id")),
       name: get("name"),
       name_ko: get("name_ko"),
@@ -40,6 +70,7 @@ export default function ProductForm({ initial, categories, onSubmit, onCancel }:
       skin_type: get("skin_type"),
       how_to_use: get("how_to_use"),
       image_url: imageUrl,
+      image_urls_raw: JSON.stringify(detailImages),
       is_bestseller: isBestseller,
       is_new: isNew,
       sort_order: Number(get("sort_order")) || 0,
@@ -114,7 +145,55 @@ export default function ProductForm({ initial, categories, onSubmit, onCancel }:
         <Textarea name="how_to_use" rows={3} defaultValue={initial?.how_to_use} placeholder="사용 방법 안내" />
       </div>
 
-      <ImageUploader value={imageUrl} onChange={setImageUrl} label="대표 이미지" />
+      {/* 썸네일 이미지 */}
+      <ImageUploader value={imageUrl} onChange={setImageUrl} label="썸네일 이미지 (목록/카드용)" />
+
+      {/* 상세페이지 이미지 */}
+      <div className="space-y-3">
+        <label className="block text-sm font-medium">
+          상세페이지 이미지 <span className="text-hestia-gray font-normal">(여러 장 업로드 가능 — 순서대로 세로 표시)</span>
+        </label>
+
+        {detailImages.length > 0 && (
+          <div className="grid grid-cols-3 gap-3">
+            {detailImages.map((url, i) => (
+              <div key={i} className="relative group">
+                <div className="relative aspect-[3/4] overflow-hidden rounded border border-gray-200">
+                  <Image
+                    src={getImageUrl(url)}
+                    alt={`상세 이미지 ${i + 1}`}
+                    fill
+                    className="object-cover"
+                    sizes="200px"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeDetailImage(i)}
+                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-0.5 hover:bg-red-600"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+                <p className="text-xs text-center text-hestia-gray mt-1">{i + 1}번째</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <label className="flex items-center gap-2 border-2 border-dashed border-gray-200 rounded-sm p-4 cursor-pointer hover:border-hestia-gold transition-colors">
+          <Plus className="h-5 w-5 text-hestia-gray" />
+          <span className="text-sm text-hestia-gray">
+            {uploading ? "업로드 중..." : "이미지 추가 (여러 장 선택 가능)"}
+          </span>
+          <input
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            multiple
+            className="hidden"
+            onChange={handleDetailImageAdd}
+          />
+        </label>
+      </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>

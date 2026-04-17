@@ -98,15 +98,6 @@ export default function ProductDetail({ product }: ProductDetailProps) {
         </div>
       </div>
 
-      {/* 문의 버튼 */}
-      <div className="pt-4">
-        <Link
-          href={`/inquiry/write?product=${product.id}`}
-          className="inline-block border border-hestia-dark text-hestia-dark px-8 py-3 text-sm tracking-widest hover:bg-hestia-dark hover:text-white transition-colors"
-        >
-          제품 문의하기
-        </Link>
-      </div>
     </div>
   );
 }
