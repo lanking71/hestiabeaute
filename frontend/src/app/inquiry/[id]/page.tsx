@@ -66,8 +66,7 @@ export default function InquiryDetailPage({ params }: Props) {
     setDeleteError("");
     const result = await deleteInquiryByPassword(id, deletePassword);
     if (result.ok) {
-      router.refresh(); // 서버 컴포넌트 캐시 무효화
-      router.push("/inquiry");
+      window.location.href = "/inquiry"; // 완전 리로드로 최신 목록 보장
     } else {
       setDeleteError(result.error || "삭제에 실패했습니다.");
       setDeleteLoading(false);

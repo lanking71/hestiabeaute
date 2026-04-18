@@ -99,7 +99,7 @@ export async function getProduct(slug: string): Promise<Product> {
 // 문의 목록 가져오기 (페이징 포함)
 // page: 몇 번째 페이지, size: 한 페이지에 몇 개
 export async function getInquiries(page = 1, size = 10): Promise<PaginatedResponse<Inquiry>> {
-  return apiFetch<PaginatedResponse<Inquiry>>(`/inquiry?page=${page}&size=${size}`);
+  return apiFetch<PaginatedResponse<Inquiry>>(`/inquiry?page=${page}&size=${size}`, { cache: "no-store" });
 }
 
 // 문의 상세 가져오기
