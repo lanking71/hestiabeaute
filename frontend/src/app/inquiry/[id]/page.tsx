@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { formatDate } from "@/lib/utils";
 import { getInquiryRaw, deleteInquiryByPassword } from "@/lib/api";
@@ -14,7 +13,6 @@ interface Props {
 
 export default function InquiryDetailPage({ params }: Props) {
   const id = Number(params.id);
-  const router = useRouter();
 
   const [inquiry, setInquiry] = useState<Inquiry | null>(null);
   const [loading, setLoading] = useState(true);
