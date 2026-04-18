@@ -198,11 +198,13 @@ def create_product(db: Session, data: schemas.ProductCreate) -> models.Product:
 
 def update_product(db: Session, product_id: int, data: schemas.ProductUpdate) -> models.Product | None:
     """제품 정보 수정하기 (변경된 항목만 업데이트)"""
+    from datetime import datetime, timezone
     obj = get_product(db, product_id)
     if not obj:
         return None
     for field, value in data.model_dump(exclude_unset=True).items():
         setattr(obj, field, value)
+    obj.updated_at = datetime.now(timezone.utc)
     db.commit()
     db.refresh(obj)
     return obj

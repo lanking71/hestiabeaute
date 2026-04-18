@@ -10,7 +10,7 @@ router = APIRouter(prefix="/api/admin/inquiry", tags=["admin-inquiry"])
 @router.get("", response_model=schemas.PaginatedInquiries)
 def list_inquiries(
     page: int = Query(1, ge=1),
-    size: int = Query(20, ge=1, le=100),
+    size: int = Query(20, ge=1, le=1000),
     db: Session = Depends(get_db),
     _: str = Depends(get_current_admin),
 ):

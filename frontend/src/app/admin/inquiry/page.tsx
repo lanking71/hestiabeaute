@@ -20,7 +20,7 @@ export default function AdminInquiryPage() {
   }
 
   async function load() {
-    const result = await adminGetInquiries(getToken()).catch(() => ({ items: [] }));
+    const result = await adminGetInquiries(getToken(), 1, 1000).catch(() => ({ items: [] }));
     setInquiries(result.items);
   }
 

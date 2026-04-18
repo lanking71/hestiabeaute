@@ -11,7 +11,7 @@ router = APIRouter(prefix="/api/admin/products", tags=["admin-products"])
 def list_products(
     category: str | None = Query(None),
     page: int = Query(1, ge=1),
-    size: int = Query(20, ge=1, le=100),
+    size: int = Query(20, ge=1, le=1000),
     db: Session = Depends(get_db),
     _: str = Depends(get_current_admin),
 ):

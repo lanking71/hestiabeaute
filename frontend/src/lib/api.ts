@@ -254,8 +254,8 @@ export async function adminUploadImage(token: string, file: File): Promise<{ url
 }
 
 // 관리자: 문의 목록 가져오기
-export async function adminGetInquiries(token: string, page = 1): Promise<PaginatedResponse<Inquiry>> {
-  return apiFetch<PaginatedResponse<Inquiry>>(`/admin/inquiry?page=${page}`, {
+export async function adminGetInquiries(token: string, page = 1, size = 20): Promise<PaginatedResponse<Inquiry>> {
+  return apiFetch<PaginatedResponse<Inquiry>>(`/admin/inquiry?page=${page}&size=${size}`, {
     headers: authHeaders(token),
   });
 }

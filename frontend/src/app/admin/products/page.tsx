@@ -19,7 +19,7 @@ export default function AdminProductsPage() {
   }
 
   async function load() {
-    const result = await adminGetProducts(getToken(), { size: 50 }).catch(() => ({ items: [], total: 0 }));
+    const result = await adminGetProducts(getToken(), { size: 1000 }).catch(() => ({ items: [], total: 0 }));
     setProducts(result.items);
     setTotal(result.total);
   }

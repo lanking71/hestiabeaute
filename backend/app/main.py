@@ -13,9 +13,11 @@
 #   5. 앱 시작 시 DB 테이블 자동 생성
 # =====================================================
 
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware  # CORS 처리
-from fastapi.staticfiles import StaticFiles         # 정적 파일(이미지) 제공
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse
+from sqlalchemy.exc import OperationalError
 from pathlib import Path
 
 # 설정값 가져오기
@@ -71,6 +73,24 @@ app.include_router(admin_products.router)    # CRUD /api/admin/products
 app.include_router(admin_inquiry.router)     # /api/admin/inquiry
 app.include_router(upload.router)            # POST /api/admin/upload
 app.include_router(admin_banners.router)     # CRUD /api/admin/banners
+
+
+@app.exception_handler(OperationalError)
+async def db_lock_handler(request: Request, exc: OperationalError):
+    """SQLite 잠금 에러를 503으로 변환 — CORS 헤더 포함"""
+    return JSONResponse(
+        status_code=503,
+        content={"detail": "서버가 잠시 바쁩니다. 잠시 후 다시 시도해 주세요."},
+    )
+
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    """예상치 못한 에러 — 500 반환 (CORS 헤더 보장)"""
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."},
+    )
 
 
 @app.on_event("startup")
