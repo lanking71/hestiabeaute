@@ -105,10 +105,36 @@ export async function getInquiries(page = 1, size = 10): Promise<PaginatedRespon
 // 문의 상세 가져오기
 // password: 비밀글인 경우 비밀번호 필요
 export async function getInquiry(id: number, password?: string): Promise<Inquiry> {
-  // 비밀번호가 있으면 쿼리 파라미터로 추가
-  // encodeURIComponent: URL에서 사용할 수 없는 특수문자를 안전하게 변환
   const query = password ? `?password=${encodeURIComponent(password)}` : "";
   return apiFetch<Inquiry>(`/inquiry/${id}${query}`);
+}
+
+// 문의 상세 — HTTP 상태 코드 포함 반환 (비밀글 처리용)
+export async function getInquiryRaw(
+  id: number,
+  password?: string
+): Promise<{ status: number; data?: Inquiry; error?: string }> {
+  const query = password ? `?password=${encodeURIComponent(password)}` : "";
+  const res = await fetch(`${API_URL}/inquiry/${id}${query}`, {
+    headers: { "Content-Type": "application/json" },
+    cache: "no-store",
+  });
+  if (res.ok) return { status: res.status, data: await res.json() };
+  const err = await res.json().catch(() => ({ detail: "오류가 발생했습니다" }));
+  return { status: res.status, error: err.detail };
+}
+
+// 문의 삭제 — 작성 시 입력한 비밀번호로 본인 확인
+export async function deleteInquiryByPassword(
+  id: number,
+  password: string
+): Promise<{ ok: boolean; error?: string }> {
+  const res = await fetch(`${API_URL}/inquiry/${id}?password=${encodeURIComponent(password)}`, {
+    method: "DELETE",
+  });
+  if (res.ok || res.status === 204) return { ok: true };
+  const err = await res.json().catch(() => ({ detail: "오류가 발생했습니다" }));
+  return { ok: false, error: err.detail };
 }
 
 // 새 문의 작성하기

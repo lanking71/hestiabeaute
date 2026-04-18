@@ -36,3 +36,18 @@ def get_inquiry(
 def create_inquiry(data: schemas.InquiryCreate, db: Session = Depends(get_db)):
     """문의 작성"""
     return crud.create_inquiry(db, data)
+
+
+@router.delete("/{inquiry_id}", status_code=204)
+def delete_inquiry_public(
+    inquiry_id: int,
+    password: str = Query(..., description="작성 시 입력한 비밀번호"),
+    db: Session = Depends(get_db),
+):
+    """문의 삭제 — 작성 시 입력한 비밀번호 확인 후 삭제"""
+    inquiry = crud.get_inquiry(db, inquiry_id)
+    if not inquiry:
+        raise HTTPException(status_code=404, detail="문의를 찾을 수 없습니다")
+    if not crud.verify_password(password, inquiry.password):
+        raise HTTPException(status_code=403, detail="비밀번호가 올바르지 않습니다")
+    crud.delete_inquiry(db, inquiry_id)
